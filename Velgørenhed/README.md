@@ -1,6 +1,6 @@
 # Writeup - Velgørenhed (Blockchain - Underflow & Reentrency)
 ![CTF objective](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213040.png)
-We are presented with a link to a website that deploys a contract on the Ropsten testnet. We are given the source code to the smart contract and a contract address. Our goal is to empty the contract for funds.
+# We are presented with a link to a website that deploys a contract on the Ropsten testnet. We are given the source code to the smart contract and a contract address. Our goal is to empty the contract for funds.
 
 We are first going to take a look at the smart contract to look for any potential vulnurabilites. 
 ![Source code](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213051.png)
