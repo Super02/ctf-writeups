@@ -14,7 +14,7 @@ We are first going to take a look at the smart contract to look for any potentia
    }
 ```
 
-What is interesting about this function is that it does a call before setting the donaterBalance. This allows us to create a fallback that executes code and changes the state of the contract before the last line of code is executed in the function. The idea behind this is to change donatorBalance to a value lower than the variable amount. Doing this will create a underflow. And since donatorBalance is a uint (unsigned integer) it will wrap around giving us an insanely high donatorBalance.
+What is interesting about this function is that it does a call before setting the donatorBalance. This allows us to create a fallback that executes code and changes the state of the contract before the last line of code is executed in the function. The idea behind this is to change donatorBalance to a value lower than the variable amount. Doing this will create a underflow. And since donatorBalance is a uint (unsigned integer) it will wrap around giving us an insanely high donatorBalance.
 
 #### Execution
 To execute the smart contract functions we are going to use [Ethereum remix](https://remix.ethereum.org/). We are going to create two files. A attack.sol and a file named charity.sol. The charity file contains the source code of the smart contract. While the attack.sol is something we have to write ourselves.
