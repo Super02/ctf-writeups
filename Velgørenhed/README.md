@@ -1,9 +1,9 @@
 # Writeup
 We are presented with a link to a website that deploys a contract on the Ropsten testnet. We are given the source code to the smart contract and a contract address. Our goal is to empty the contract for funds.
-[[/Screenshot 2022-05-10 213040.png|CTF objective]]
+![CTF objective](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213040.png)
 
 We are first going to take a look at the smart contract to look for any potential vulnurabilites. 
-[[/Screenshot 2022-05-10 213051.png|Source code]]
+![Source code](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213051.png)
 When looking through the smart contract (either by hand or by using a tool like slither) you may notice the function donateToContract.
 ```sol
    function donateToContract(uint amount) public payable{
@@ -23,4 +23,4 @@ Now that our donatorBalance is a very high value we just use the withdraw functi
 
 #### Results
 When we have withdrawn the funds from the contract we are left with an empty contract. This meets the goal set in the challenge. So we just go back and click on the button called "Check solved". This will give us our flag.
-[[/Screenshot 2022-05-10 213040.png|Source code]]
+![Results](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213040.png)
