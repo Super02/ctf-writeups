@@ -5,7 +5,7 @@ We are presented with a link to a website that deploys a contract on the Ropsten
 We are first going to take a look at the smart contract to look for any potential vulnurabilites. 
 ![Source code](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213051.png)
 When looking through the smart contract (either by hand or by using a tool like slither) you may notice the function donateToContract.
-```sol
+```javascript
    function donateToContract(uint amount) public payable{
         require(amount <= donatorBalance[msg.sender], 'Insufficient balance');
         require(!donatedToContract[msg.sender], 'Can only donate to contract once!');
@@ -23,7 +23,7 @@ To execute the smart contract functions we are going to use ![Ethereum remix](ht
 
 ##### Creating attack.sol
 Looking onlien we can find examples of reentrency attacks. If we modify these examples we can use them here. We create a attack function that first executes the deposit function to deposit 0.1 ether. When we have deposited the ether we can then execute the vulnurable donateToContract function. We then have a fallback function that runes right before the donatorBalance is changed giving us an opportunity to withdraw our 0.1 ether. This leaves the donatorBalance at 0 untill after our fallback function is done executing as the donateToContract function executes the last line of code subtracting 0.1 ether from our donatorBalance that is 0. This create a underflow as 0 - 0.1 would be a negative value thus wrapping the unsigned integer around giving us a large donatorBalance.
-```sol
+```javascript
 pragma solidity 0.7.4;
 
 import './charity.sol';
