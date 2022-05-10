@@ -2,7 +2,7 @@
 ## We are presented with a link to a website that deploys a contract on the Ropsten testnet. We are given the source code to the smart contract and a contract address. Our goal is to empty the contract for funds.
 ![CTF objective](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213040.png)
 ![Source code](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213051.png)
-We are first going to take a look at the smart contract to look for any potential vulnurabilites. When looking through the smart contract (either by hand or by using a tool like slither) you may notice the function donateToContract.
+We are first going to take a look at the smart contract to look for any potential vulnurabilites. When looking through the smart contract (either by hand or by using a tool like ![slither](https://github.com/crytic/slither)) you may notice the function donateToContract.
 ```javascript
    function donateToContract(uint amount) public payable{
         require(amount <= donatorBalance[msg.sender], 'Insufficient balance');
