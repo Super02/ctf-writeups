@@ -53,9 +53,12 @@ contract Attacker {
 }
 ```
 
-#### Withdraw
+##### Withdraw
 Now that our donatorBalance is a very high value we just use the withdraw function to withdraw. The withdraw function is set to withdraw all funds of the account even though we have a higher donatorBalance than the actual balance of the account.
 
+##### Executing on the blockchain
+To execute the attack function on the blockchain we need a wallet with Ropsten testnet ethereum. You can get testnet ethereum by using faucets on the internet. Then we are going to use metamask and connect it to ethereum remix by selecting injected web3. We then deploy our attack contract and execute the attack function with 0.1 ether. This will transact the attack on the Ropsten testnet and empty our contract.
+
 #### Results
-When we have withdrawn the funds from the contract we are left with an empty contract. This meets the goal set in the challenge. So we just go back and click on the button called "Check solved". This will give us our flag.
+We have withdrawn the funds from the contract and we are left with an empty contract. This meets the goal set in the challenge. So we just go back and click on the button called "Check solved". This will give us our flag.
 ![Results](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213021.png)
