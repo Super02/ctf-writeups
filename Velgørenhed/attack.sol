@@ -6,8 +6,8 @@ contract Attacker {
     Charity public charity;
     bool firstcall = true;
     
-    constructor(address _etherBankAddress) {
-        charity = Charity(_etherBankAddress);
+    constructor(address _charityAddress) {
+        charity = Charity(_charityAddress);
     }
     
     function attack() public payable {
