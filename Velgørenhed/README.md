@@ -1,8 +1,8 @@
-# Writeup - Velgørenhed (Blockchain - Underflow & Reentrency)
+# Writeup - Velgørenhed (Blockchain - Underflow & Reentrancy)
 ## We are presented with a link to a website that deploys a contract on the Ropsten testnet. We are given the source code to the smart contract and a contract address. Our goal is to empty the contract for funds.
 ![CTF objective](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213040.png)
 ![Source code](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Screenshot%202022-05-10%20213051.png)
-We are first going to take a look at the smart contract to look for any potential vulnurabilites. When looking through the smart contract (We can also just use a tool like [slither](https://github.com/crytic/slither) to analyze the contract for us).
+We are first going to take a look at the smart contract to look for any potential vulnerabilities. When looking through the smart contract (We can also just use a tool like [slither](https://github.com/crytic/slither) to analyze the contract for us).
 The function donateToContract has our interest.
 ```javascript
    function donateToContract(uint amount) public payable{
@@ -15,7 +15,7 @@ The function donateToContract has our interest.
    }
 ```
 
-The interesting part about this function is the two last lines. The function does a call before changing the donatorBalance variable. The solidity code is run synchronosly, so the next line of code wont run untill the line before has fully executed. This can be exploited because we can setup a fallback function that runs when we recieve the call from this function. We recieve the call before our donator balance has changed. So in our fallback function we are able to run other functions in the smart contract before the donator balance is changed in the donateToContract function. If we execute the withdraw function before donator balance has been changed by donateToContract our donatorBalance will be 0 before donateToContract will subtract the amount. When we subtract something from 0 and we have an unsigned integer we will wrap around and create an underflow thus setting our donatorBalance to a very high value. 
+The interesting part about this function is the two last lines. The function does a call before changing the donatorBalance variable. The solidity code is run synchronously, so the next line of code wont run untill the line before has fully executed. This can be exploited because we can setup a fallback function that runs when we receive the call from this function. We receive the call before our donator balance has changed. So in our fallback function we are able to run other functions in the smart contract before the donator balance is changed in the donateToContract function. If we execute the withdraw function before donator balance has been changed by donateToContract our donatorBalance will be 0 before donateToContract will subtract the amount. When we subtract something from 0 and we have an unsigned integer we will wrap around and create a underflow thus setting our donatorBalance to a very high value. 
 Illustration:
 ![Illustration](https://github.com/Super02/ctf-writeups/blob/main/Velg%C3%B8renhed/Illustration.png)
 
@@ -23,7 +23,7 @@ Illustration:
 To execute the smart contract functions we are going to use [Ethereum remix](https://remix.ethereum.org/). We are going to create two files. An attack.sol file and a file named charity.sol. The charity file contains the source code of the smart contract. While the attack.sol is something we have to write ourselves.
 
 ##### Creating attack.sol
-Looking onlien we can find examples of reentrency attacks. If we modify these examples we can use them here. We create a attack function that first executes the deposit function to deposit 0.1 ether. When we have deposited the ether we can then execute the vulnurable donateToContract function. We then have a fallback function that runes right before the donatorBalance is changed giving us an opportunity to withdraw our 0.1 ether. This leaves the donatorBalance at 0 untill after our fallback function is done executing as the donateToContract function executes the last line of code subtracting 0.1 ether from our donatorBalance that is 0. This create a underflow as 0 - 0.1 would be a negative value thus wrapping the unsigned integer around giving us a large donatorBalance.
+Looking onlien we can find examples of reentrancy attacks. If we modify these examples we can use them here. We create a attack function that first executes the deposit function to deposit 0.1 ether. When we have deposited the ether we can then execute the vulnurable donateToContract function. We then have a fallback function that runs right before the donatorBalance is changed giving us an opportunity to withdraw our 0.1 ether. This leaves the donatorBalance at 0 untill after our fallback function is done executing as the donateToContract function executes the last line of code subtracting 0.1 ether from our donatorBalance which is 0. This create a underflow as 0 - 0.1 would be a negative value thus wrapping the unsigned integer around giving us a large donatorBalance.
 ```javascript
 pragma solidity 0.7.4;
 
